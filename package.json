@@ -1,0 +1,21 @@
+{
+  "name": "fmonline",
+  "version": "1.0.0",
+  "description": "Site that will predict the outcome of games based on data and user input",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "Alex Kubecka",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "express-session": "^1.17.0",
+    "handlebars": "^4.5.3",
+    "mongodb": "^3.4.1"
+  }
+}
