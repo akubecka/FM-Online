@@ -28,8 +28,11 @@ const fs = require("fs");
   router.post("/soccerLeague", async function (req,res){
     try{
         const leag = req.body.league;
+        if(leag=='bpl'){//THIS DOESNT WORK IM THINKING WE COULD STORE THE HANDLEBARS STRING IN MONGO AND THEN GRAB IT HERE AND HANDLEBAR IT SEPERATELY ON THE SAME PAGE
+          var spawn = require("child_process").spawn; 
+          var process = spawn('python',["./test.py"]);
+        }
         const rend = "layouts/soccer/"+ leag;
-        console.log("wuh");
         fs.readFile(__dirname+'/' + leag + '.txt', 'utf8', function(err, contents) {
           if (err) throw err;
           console.log(contents);

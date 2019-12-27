@@ -36,6 +36,8 @@ const rewriteUnsupportedBrowserMethods = (req, res, next) => {
   // let the next middleware run:
   next();
 };
+var spawn = require("child_process").spawn; 
+var process = spawn('python',["./test.py"]);
 
 app.use("/public", static);
 app.use(bodyParser.json());
