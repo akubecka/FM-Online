@@ -5,24 +5,24 @@ const leagues = require("./leagues");
 
 module.exports = {
     //Create and add a team to the database
-    async create(name, players) { //ADD A LOT MORE PLAYER DETAILS TO THIS
+    async createID(name) { //ADD A LOT MORE PLAYER DETAILS TO THIS
       if (name == undefined) throw new Error("Name is undefined.");
-      if (players == undefined) throw new Error("Players is undefined.");//MAYBE FINE TO HAVE NO PLAYERS
+      //if (players == undefined) throw new Error("Players is undefined.");//MAYBE FINE TO HAVE NO PLAYERS
       if (typeof name !== "string") throw new Error("Name needs to be a string.");
-      if (typeof players !== "array") throw new Error("Players needs to be an array.");
+      //if (typeof players !== "array") throw new Error("Players needs to be an array.");
   
-      const data = await players();
+      const data = await teams();
   
       var teamObj = {
-        name: name,
-        players: players
+        teamName: name,
+        playerArr: []
       };
   
       const insertInfo = await data.insertOne(teamObj);
       if (insertInfo.insertedCount === 0) throw new Error("Could not add team.");
       const newId = insertInfo.insertedId;
       const team = await this.get(newId);
-      return team;
+      return newId;
     },
   
     //Returns all teams in database
@@ -31,7 +31,17 @@ module.exports = {
       const team = await teamCollection.find({}).toArray();
       return team;
     },
-  
+
+    async addPlayer(teamID, player){
+      const Tdata = await teams();
+      //const team = await this.get(teamID);
+      await Tdata.updateOne(
+        {_id: teamID},
+        {$push: {playerArr: player}}
+      )
+      return player;
+    },
+
     //Get the team given ID
     async get(id){
       if(id == undefined) throw new Error("ID is undefined.");

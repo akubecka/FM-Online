@@ -1,0 +1,24 @@
+<div>Create your own league with teams and players</div>
+
+<form method="POST" id="myForm" action="/sport/createSoccerTeam">
+  League Name: <input type="text" name="leagueName"><br>
+  Team Name: <input type="text" name="teamName"><br>
+  Add Player: <input type="text" name="playerName"><br>
+  <input type="submit" value="Submit">
+</form>
+<div>Teams:</div>
+{{#each leagues}}
+    <ul>
+        <li>League Name: {{leagueName}}</li>
+        {{#each teamArr}}
+        <ul>
+            <li>Team Name: {{teamName}}</li>
+            {{#each playerArr}}
+            <ul>
+                <li>Player Name: {{playerName}}</li>
+            </ul>
+            {{/each}}
+        </ul>
+        {{/each}}
+    </ul>
+{{/each}}

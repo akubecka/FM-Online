@@ -13,7 +13,7 @@ module.exports = {
     const data = await players();
 
     var playerObj = {
-      name: name,
+      playerName: name,
     };
 
     const insertInfo = await data.insertOne(playerObj);
@@ -34,14 +34,12 @@ module.exports = {
   async get(id){
     if(id == undefined) throw new Error("ID is undefined.");
     if(typeof id != "object" && typeof id !="string") throw new Error("ID must be string.");
-    
     var ObjectID = require('mongodb').ObjectID;
     if(ObjectID.isValid(id)){
       id = new ObjectID(id); // wrap in ObjectID
     }else{
       throw new Error("ID is not a valid ObjectID");
     }
-
     const data = await players();
     const str = await data.findOne({_id: id })
     if(str===null) throw new Error("Can't find ID");

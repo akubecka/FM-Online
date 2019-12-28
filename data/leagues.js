@@ -29,23 +29,33 @@ module.exports = {
         return league;
     },
 
+    async addTeam(leagueID, team){
+        const Ldata = await leagues();
+        //const team = await this.get(teamID);
+        await Ldata.updateOne(
+          {_id: leagueID},
+          {$push: {teamArr: team}}
+        )
+        return team;
+      },
     //Add a league to the database
-    async addLeague(name, teams){//CHANGE TEAMS TO ARRAY!!!!!!!!!!!!!!!1
+    async createID(name){
         if(name==undefined) throw new Error("Name is undefined.");
-        if(teams==undefined) throw new Error("Teams is undefined.");
+        //if(teams==undefined) throw new Error("Teams is undefined.");
         if(typeof name!="string") throw new Error("Name is not a string.");
-        if(typeof teams!="string") throw new Error("Team is not an array.");
+        //if(typeof teams!="string") throw new Error("Team is not an array.");
 
         let newLeague = {
-            title: title,
-            teams: teams
+            leagueName: name,
+            teamArr: []
         };
         const leagueCollection = await leagues();
         //const animalPoster = await animals.get(authorId);
 
         const insert = await leagueCollection.insertOne(newLeague);
         const newId = insert.insertedId;
-        return await this.getLeagueById(newId);
+        await this.getLeagueById(newId);
+        return newId;
     },
 
     //Remove the entire league from the database

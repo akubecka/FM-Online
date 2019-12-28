@@ -25,10 +25,36 @@ const fs = require("fs");
     }
   });
 
+  router.post("/createSoccerTeam", async function (req,res){
+    try{
+        const leagueName = req.body.leagueName;
+        const teamName = req.body.teamName;//Check to see if any teams are already named this or not whatever
+        const playerName = req.body.playerName;
+        const leagueID = await leagueData.createID(leagueName);
+        const player = await playerData.create(playerName);
+        const teamID = await teamData.createID(teamName);
+        const p = await teamData.addPlayer(teamID, player);//Adds player to league
+        const team = await teamData.get(teamID);
+        const t = await leagueData.addTeam(leagueID, team);//Adds team to league
+        const leagues = await leagueData.getAll();
+        res.render("layouts/soccer/create", {leagues: leagues})
+        return;
+    }catch(e){
+      console.log(e);
+      res.sendStatus(500);
+    }
+  });
+
   router.post("/soccerLeague", async function (req,res){
     try{
         const leag = req.body.league;
+        if(leag=='create'){
+          const teams = await teamData.getAll();
+          res.render("layouts/soccer/create", {teams: teams})
+          return;
+        }
         if(leag=='bpl'){//THIS DOESNT WORK IM THINKING WE COULD STORE THE HANDLEBARS STRING IN MONGO AND THEN GRAB IT HERE AND HANDLEBAR IT SEPERATELY ON THE SAME PAGE
+                        //OR ACTUALLY WE COULD JUST READ THE HANDLEBAR STRING HERE AND PASS IT TO THE BPL HANDLEBAR AS 'FILE' CONTENTS
           var spawn = require("child_process").spawn; 
           var process = spawn('python',["./test.py"]);
         }
