@@ -7,8 +7,10 @@ const teams = require("./teams");
 module.exports = {
     //Returns all the leagues in the database
     async getAll(){
+        console.log("getting all");
         const leagueCollection = await leagues();
         const league = await leagueCollection.find({}).toArray();
+        console.log("got all");
         return league;
     },
 
@@ -24,18 +26,23 @@ module.exports = {
             throw new Error("ID is not a valid ObjectID");
         }
         const leagueCollection = await leagues();
+        console.log(id);
         const league = await leagueCollection.findOne({_id: id });
         if(league===null) throw new Error("Can't find league.");
         return league;
     },
 
     async addTeam(leagueID, team){
+        console.log("add team test2");
         const Ldata = await leagues();
         //const team = await this.get(teamID);
+        ObjectId = require('mongodb').ObjectID;
+
         await Ldata.updateOne(
-          {_id: leagueID},
+          {_id: ObjectId(leagueID)},
           {$push: {teamArr: team}}
         )
+        //console.log("add team test2");
         return team;
       },
     //Add a league to the database

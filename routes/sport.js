@@ -25,75 +25,15 @@ const fs = require("fs");
     }
   });
 
-  router.post("/createSoccerLeague", async function (req,res){
-    try{
-        const leagueName = req.body.leagueName;
-        const teamName = req.body.teamName;//Check to see if any teams are already named this or not whatever
-        const playerName = req.body.playerName;
-        const leagueID = await leagueData.createID(leagueName);
-        const player = await playerData.create(playerName);
-        const teamID = await teamData.createID(teamName);
-        await teamData.addPlayer(teamID, player);//Adds player to league
-        const team = await teamData.get(teamID);
-        await leagueData.addTeam(leagueID, team);//Adds team to league
-        const leagues = await leagueData.getAll();
-        if(req.body.leagueName){
-          //Add the league
-        }
-        res.render("layouts/soccer/create", {leagues: leagues})
-        return;
-    }catch(e){
-      console.log(e);
-      res.sendStatus(500);
-    }
-  });
-
-  router.post("/createSoccerTeam", async function (req,res){
-    try{
-        const leagueName = req.body.leagueName;
-        const teamName = req.body.teamName;//Check to see if any teams are already named this or not whatever
-        const playerName = req.body.playerName;
-        const leagueID = await leagueData.createID(leagueName);
-        const player = await playerData.create(playerName);
-        const teamID = await teamData.createID(teamName);
-        await teamData.addPlayer(teamID, player);//Adds player to league
-        const team = await teamData.get(teamID);
-        await leagueData.addTeam(leagueID, team);//Adds team to league
-        const leagues = await leagueData.getAll();
-        res.render("layouts/soccer/create", {leagues: leagues})
-        return;
-    }catch(e){
-      console.log(e);
-      res.sendStatus(500);
-    }
-  });
-
-  router.post("/createSoccerPlayer", async function (req,res){
-    try{
-        const leagueName = req.body.leagueName;
-        const teamName = req.body.teamName;//Check to see if any teams are already named this or not whatever
-        const playerName = req.body.playerName;
-        const leagueID = await leagueData.createID(leagueName);
-        const player = await playerData.create(playerName);
-        const teamID = await teamData.createID(teamName);
-        await teamData.addPlayer(teamID, player);//Adds player to league
-        const team = await teamData.get(teamID);
-        await leagueData.addTeam(leagueID, team);//Adds team to league
-        const leagues = await leagueData.getAll();
-        res.render("layouts/soccer/create", {leagues: leagues})
-        return;
-    }catch(e){
-      console.log(e);
-      res.sendStatus(500);
-    }
-  });
-
   router.post("/soccerLeague", async function (req,res){
     try{
         const leag = req.body.league;
         if(leag=='create'){
-          const teams = await teamData.getAll();
-          res.render("layouts/soccer/create", {teams: teams})
+          //console.log("in createee")
+          const leagues = await leagueData.getAll();
+          //console.log(leagues);
+          //console.log("no league");
+          res.render("layouts/soccer/create", {leagueTime: true, leagues: leagues})
           return;
         }
         if(leag=='bpl'){//THIS DOESNT WORK IM THINKING WE COULD STORE THE HANDLEBARS STRING IN MONGO AND THEN GRAB IT HERE AND HANDLEBAR IT SEPERATELY ON THE SAME PAGE

@@ -32,13 +32,16 @@ module.exports = {
       return team;
     },
 
+    //Adds player to the team
     async addPlayer(teamID, player){
       const Tdata = await teams();
-      //const team = await this.get(teamID);
+      console.log(player);
+      ObjectId = require('mongodb').ObjectID;
       await Tdata.updateOne(
-        {_id: teamID},
+        {_id: ObjectId(teamID)},
         {$push: {playerArr: player}}
-      )
+      );
+      const team = await this.get(teamID);
       return player;
     },
 
@@ -80,7 +83,7 @@ module.exports = {
       return deleted;
     },
   
-    //Adds player to team
+    //Adds team to league
     async addTeamToLeague(){
       //uhh
     },

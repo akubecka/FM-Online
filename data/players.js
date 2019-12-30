@@ -19,9 +19,11 @@ module.exports = {
     const insertInfo = await data.insertOne(playerObj);
     if (insertInfo.insertedCount === 0) throw new Error("Could not add player.");
     const newId = insertInfo.insertedId;
-    const player = await this.get(newId);
-    return player;
+    //const player = await this.get(newId);
+    //return player;
+    return newId;
   },
+
 
   //Returns all players in database
   async getAll(){

@@ -1,61 +1,132 @@
 <div>Create your own league with teams and players</div>
 
-<form method="POST" id="myForm" action="/sport/createSoccerTeam">
-  League Name: <input type="text" name="leagueName"><br>
-  Team Name: <input type="text" name="teamName"><br>
-  Add Player: <input type="text" name="playerName"><br>
-  <input type="submit" value="Submit">
-</form>
-<button>Create a league</button>
-<button>Add a team to existing league</button>
-<div>View all leagues and teams:</div> <!--Initially show all leagues with teams and players OR nothing-->
 <!--Then have drop down menu with all leagues with option to add league
      then teams in league with opetion to add, then players on team with option to add(Maybe remove too)-->
-    <form method="POST" id="myForm" action="/sport/createSoccerLeague"></form>
-        <select id="league" name="league">
-            {{#if leagues}}
-            {{#each leagues}}
-                <option value="{{leagueName}}">{{leagueName}}</option>
-            {{/each}}
-        </select>
-        <input type="submit" value="submit">
-    </form>
+    {{#if leagueTime}}
+        {{#if leagues}}
+            <div>Current leagues(Navigate to the league you want to add a team or players to):</div> <!--Initially show all leagues with teams and players OR nothing-->
+            <form method="POST" id="myForm" action="/createsoccer/league">
+                <select id="league" name="league">
+                    {{#each leagues}}
+                        <option value="{{_id}}">{{leagueName}}</option>
+                    {{/each}}
+                    <option value="addLeague">Add new league</option>
+                </select>
+                <input type="submit" value="View teams">
+            </form>
+        {{else}}
+            <div>There are no leagues created you must create one.</div>
+            <form method="POST" id="myForm" action="/createsoccer/addLeague/{{leagueID}}">
+                League Name: <input type="text" name="leagueName"><br>
+            <input type="submit" value="Submit">
+            </form>
+        {{/if}}
+
             {{else}}
-    <form method="POST" id="myForm" action="/sport/createSoccerTeam"></form>
-        <select id="team" name="team">
-            {{#if teamArr}}
-            <div>Choose a team from the {{leagueChosen}}</div>
-            {{#each teamArr}}
-                <option value="{{teamName}}">{{teamName}}</option>
-            {{/each}}
-        </select>
-        <input type="submit" value="submit">
-    </form>
+    {{#if teamTime}}
+        {{#if teamArr}}
+            <form method="POST" id="myForm" action="/createsoccer/team/{{leagueID}}">
+                <select id="team" name="team">
+                    <div>Choose a team from the {{leagueChosen}}</div>
+                    {{#each teamArr}}
+                        <option value="{{teamName}}">{{teamName}}</option>
+                    {{/each}}
+                        <option value="addTeam">Add new team</option>
+                </select>
+                <input type="submit" value="View players">
+            </form>
+        {{else}}
+            <div>There are no teams created you must create one.</div>
+            <form method="POST" id="myForm" action="/createsoccer/addTeam/{{leagueID}}">
+                Team Name: <input type="text" name="teamName"><br>
+            <input type="submit" value="Submit">
+            </form>
+        {{/if}}
+
             {{else}}
-    <form method="POST" id="myForm" action="/sport/createSoccerPlayer"></form>
-        <select id="team" name="team">
-            {{#if playerArr}}
-            <div>Choose a player from {{teamChosen}}</div>
-            {{#each playerArr}}
-                <option value="{{playerName}}">{{playerName}}</option>
-            {{/each}}
-            {{/if}}
-        </select>
-        <input type="submit" value="submit">
+    {{#if playerTime}}
+        {{#if playerArr}}
+            <form method="POST" id="myForm" action="/createsoccer/player/{{teamID}}/{{leagueID}}">
+                <select id="player" name="player">
+                    <div>Choose a player from {{teamChosen}}</div>
+                    {{#each playerArr}}
+                        <option value="{{playerName}}">{{playerName}}</option>
+                    {{/each}}
+                    <option value="addPlayer">Add new player</option>
+                </select>
+                <input type="submit" value="submit">
+            </form>
+        {{else}}
+            <div>There are no players created you must create one.</div>
+            <form method="POST" id="myForm" action="/createsoccer/addPlayer/{{teamID}}/{{leagueID}}">
+                Player Name: <input type="text" name="playerName"><br>
+            <input type="submit" value="Submit">
+            </form>
+        {{/if}}
+            
+            {{else}}
+
+    {{#if addLeague}}
+    <form method="POST" id="myForm" action="/createsoccer/addLeague">
+        League Name: <input type="text" name="leagueName"><br>
+    <input type="submit" value="Submit">
     </form>
-<div>Teams:</div>
-{{#each leagues}}
-    <ul>
-        <li>League Name: {{leagueName}}</li>
-        {{#each teamArr}}
-        <ul>
-            <li>Team Name: {{teamName}}</li>
-            {{#each playerArr}}
-            <ul>
-                <li>Player Name: {{playerName}}</li>
-            </ul>
-            {{/each}}
-        </ul>
-        {{/each}}
-    </ul>
-{{/each}}
+    {{else}}
+    {{#if addTeam}}
+    <form method="POST" id="myForm" action="/createsoccer/addTeam/{{leagueID}}">
+        Team Name: <input type="text" name="teamName"><br>
+    <input type="submit" value="Submit">
+    </form>
+    {{else}}
+    {{#if addPlayer}}
+    <form method="POST" id="myForm" action="/createsoccer/addPlayer/{{teamID}}/{{leagueID}}">
+        Player Name: <input type="text" name="playerName"><br>
+    <input type="submit" value="Submit">
+    </form>
+
+        {{else}}
+
+    {{#if message}}
+
+        {{#if league}}
+            {{message}}
+            <div>Choose what you would like to do now</div>
+            <form method="POST" id="myForm" action="/createsoccer/successLeague">
+                <select id="choice" name="choice">
+                <option value="addLeague">Add another league</option>
+                <option value="{{league}}">Add team to your league</option>
+                </select>
+            <input type="submit" value="Submit">
+        {{/if}}
+
+        {{#if team}}
+            {{message}}
+            <div>Choose what you would like to do now</div>
+            <form method="POST" id="myForm" action="/createsoccer/successTeam/{{leagueID}}">
+                <select id="choice" name="choice">
+                <option value="addTeam">Add another team</option>
+                <option value="{{team}}">Add players to your team</option>
+                </select>
+            <input type="submit" value="Submit">
+        {{/if}}
+
+        {{#if player}}
+            {{message}}
+            <div>Choose what you would like to do now</div>
+            <form method="POST" id="myForm" action="/createsoccer/successPlayer/{{teamID}}/{{leagueID}}">
+                <select id="choice" name="choice">
+                <option value="{{teamID}}">Add another player</option>
+                </select>
+            <input type="submit" value="Submit">
+        {{/if}}
+    <!--End of message if-->
+
+    {{/if}}
+    {{/if}}
+    {{/if}}
+    {{/if}}
+    {{/if}}
+    {{/if}}
+    {{/if}}
+    
+    
